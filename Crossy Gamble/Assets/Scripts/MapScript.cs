@@ -5,7 +5,7 @@ public class MapScript : MonoBehaviour
 {
     int nextSpawnX;
     public GameObject prototypeRows;
-    public PlayerScript playerScript;
+    public PlayerMovementSystem playerMovementSystem;
 
     Queue<GameObject> spawnedRows = new Queue<GameObject>();
     int maxRows = 20;
@@ -22,7 +22,7 @@ public class MapScript : MonoBehaviour
             SpawnRow();
         }
 
-        if (playerScript.isMoving)
+        if (playerMovementSystem.isMovingForward)
         {
             SpawnRow();
             DeleteOldestRow();
