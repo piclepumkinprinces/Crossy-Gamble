@@ -1,25 +1,31 @@
 using UnityEngine;
 using System.Collections;
+using NUnit.Framework;
 
 public class PlayerMovementSystem : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float speed = 3f;
-    [SerializeField] private float DiceSize = 1f;
+    [SerializeField] private float speed = 3;
+    [SerializeField] private float DiceSize = 2;
     [SerializeField] private int maxSize = 10;
-    [SerializeField] private float rollAngle = 90f;
+    [SerializeField] private float rollAngle = 90;
     [SerializeField] private float rollDuration = 0.3f;
-    [SerializeField] public bool isMovingForward;
+    [SerializeField] public int isMovingForward;
 
     private Vector3? queuedDirection = null;
-    private bool isMoving = false
+    private bool isMoving = false;
 
     void Start()
     {
-        isMovingForward = false;
+        isMovingForward = 0;
     }
     void Update()
     {
+        if (isMovingForward == 1)
+        {
+            //print ("Player is moving forward");
+            isMovingForward = 0;
+        }
         HandleInput();
     }
 
@@ -30,13 +36,11 @@ public class PlayerMovementSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
         {
             inputDir = Vector3.forward;
-            isMovingForward = true;
+            isMovingForward = 1;
         }
         else if (Input.GetKeyDown(KeyCode.A)) inputDir = Vector3.left;
         else if (Input.GetKeyDown(KeyCode.D)) inputDir = Vector3.right;
         else if (Input.GetKeyDown(KeyCode.S)) inputDir = Vector3.back;
-
-        isMovingForward = false;
 
         if (!inputDir.HasValue) return;
 

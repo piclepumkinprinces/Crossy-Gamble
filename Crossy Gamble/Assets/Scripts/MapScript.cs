@@ -1,28 +1,28 @@
 using UnityEngine;
-using System.Collections.Generic; // Required for Lists or Queues
+using System.Collections.Generic; 
 
 public class MapScript : MonoBehaviour
 {
-    int nextSpawnX;
+    int nextSpawnZ;
     public GameObject prototypeRows;
-    public PlayerMovementSystem playerMovementSystem;
+    public PlayerMovementSystem PlayerMovementSystem;
 
     Queue<GameObject> spawnedRows = new Queue<GameObject>();
     int maxRows = 20;
 
     void Start()
     {
-        nextSpawnX = 2;
+        nextSpawnZ = 2;
     }
 
     void Update()
     {
-        if (nextSpawnX < 21)
+        if (nextSpawnZ < 21)
         {
             SpawnRow();
         }
 
-        if (playerMovementSystem.isMovingForward)
+        if (PlayerMovementSystem.isMovingForward == 1)
         {
             SpawnRow();
             DeleteOldestRow();
@@ -31,12 +31,12 @@ public class MapScript : MonoBehaviour
 
     void SpawnRow()
     {
-        int rowChooser = Random.Range(0, 11);
+        int rowChooser = Random.Range(0, 1);
         
-        GameObject newRow = Instantiate(prototypeRows.transform.GetChild(rowChooser).gameObject, new Vector3(nextSpawnX, 0, 0), Quaternion.identity);
+        GameObject newRow = Instantiate(prototypeRows.transform.GetChild(rowChooser).gameObject, new Vector3(0, 0, nextSpawnZ), Quaternion.Euler(0, 90, 0));
 
         spawnedRows.Enqueue(newRow);
-        nextSpawnX += 2;
+        nextSpawnZ += 2;
     }
 
     void DeleteOldestRow()
