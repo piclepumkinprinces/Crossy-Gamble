@@ -17,7 +17,7 @@ public class MapScript : MonoBehaviour
 
     void Update()
     {
-        if (nextSpawnZ < 21)
+        if (spawnedRows.Count > 20)
         {
             SpawnRow();
         }
@@ -25,7 +25,7 @@ public class MapScript : MonoBehaviour
         if (PlayerMovementSystem.isMovingForward == 1)
         {
             SpawnRow();
-            DeleteOldestRow();
+            DeleteOldestRow();  
         }
     }
 
@@ -45,6 +45,7 @@ public class MapScript : MonoBehaviour
         {
             GameObject oldRow = spawnedRows.Dequeue();
             Destroy(oldRow);
+            PlayerMovementSystem.isMovingForward = 0;
         }
     }
 }
