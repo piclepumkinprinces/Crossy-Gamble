@@ -53,8 +53,6 @@ public class PlayerMovementSystem : MonoBehaviour
             queuedDirection = null; 
             return;
         }
-
-        // We removed SpawnRow() from here because the movement hasn't physically started yet!
         StartCoroutine(Roll(direction));
     }
 
@@ -70,16 +68,14 @@ public class PlayerMovementSystem : MonoBehaviour
     {
         isMoving = true;
 
-        // --- THE FIX ---
-        // Right here, we are 100% sure the dice passed the collision check 
-        // AND is officially starting its roll. If the direction is forward, trigger the row spawn!
+
         if (direction == Vector3.forward)
         {
             isMovingForward = 1;
         }
         else
         {
-            isMovingForward = 0; // Reset it if rolling left or right
+            isMovingForward = 0;
         }
 
         float rotated = 0f;

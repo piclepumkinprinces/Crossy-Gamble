@@ -13,7 +13,7 @@ public class MapScript : MonoBehaviour
     void Start()
     {
         nextSpawnZ = 2;
-        maxRows = 32;
+        maxRows = 33;
     }
 
     void Update()
@@ -32,7 +32,7 @@ public class MapScript : MonoBehaviour
 
     void SpawnRow()
     {
-        int rowChooser = Random.Range(0, 2);
+        int rowChooser = Random.Range(0, 3);
         
         GameObject newRow = Instantiate(prototypeRows.transform.GetChild(rowChooser).gameObject, new Vector3(0, 0, nextSpawnZ), Quaternion.Euler(0, 90, 0));
 
