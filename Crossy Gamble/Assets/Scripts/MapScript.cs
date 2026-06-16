@@ -8,16 +8,17 @@ public class MapScript : MonoBehaviour
     public PlayerMovementSystem PlayerMovementSystem;
 
     Queue<GameObject> spawnedRows = new Queue<GameObject>();
-    int maxRows = 20;
+    int maxRows;
 
     void Start()
     {
         nextSpawnZ = 2;
+        maxRows = 32;
     }
 
     void Update()
     {
-        if (spawnedRows.Count > 20)
+        if (spawnedRows.Count > maxRows)
         {
             SpawnRow();
         }
@@ -31,7 +32,7 @@ public class MapScript : MonoBehaviour
 
     void SpawnRow()
     {
-        int rowChooser = Random.Range(0, 1);
+        int rowChooser = Random.Range(0, 2);
         
         GameObject newRow = Instantiate(prototypeRows.transform.GetChild(rowChooser).gameObject, new Vector3(0, 0, nextSpawnZ), Quaternion.Euler(0, 90, 0));
 

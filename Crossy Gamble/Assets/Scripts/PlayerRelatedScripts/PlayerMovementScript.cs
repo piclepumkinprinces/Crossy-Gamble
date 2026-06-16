@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using NUnit.Framework;
 
 public class PlayerMovementSystem : MonoBehaviour
 {
@@ -11,7 +10,9 @@ public class PlayerMovementSystem : MonoBehaviour
     [SerializeField] private float rollAngle = 90;
     [SerializeField] private float rollDuration = 0.3f;
     [SerializeField] public int isMovingForward;
-    bool forwardCheck;
+
+    [Header("Collision Settings")]
+    [SerializeField] private LayerMask obstacleLayer; 
 
     private Vector3? queuedDirection = null;
     private bool isMoving = false;
@@ -19,8 +20,8 @@ public class PlayerMovementSystem : MonoBehaviour
     void Start()
     {
         isMovingForward = 0;
-        forwardCheck = false;
     }
+
     void Update()
     {
         HandleInput();
@@ -30,15 +31,9 @@ public class PlayerMovementSystem : MonoBehaviour
     {
         Vector3? inputDir = null;
 
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            inputDir = Vector3.forward;
-            forwardCheck = true;
-        }
+        if (Input.GetKeyDown(KeyCode.W)) inputDir = Vector3.forward;
         else if (Input.GetKeyDown(KeyCode.A)) inputDir = Vector3.left;
         else if (Input.GetKeyDown(KeyCode.D)) inputDir = Vector3.right;
-        else if (Input.GetKeyDown(KeyCode.S)) inputDir = Vector3.back;
-        
 
         if (!inputDir.HasValue) return;
 
@@ -53,26 +48,43 @@ public class PlayerMovementSystem : MonoBehaviour
 
     void TryMove(Vector3 direction)
     {
-        if (!CanMoveThere(direction)) return;
-        SpawnRow();
+        if (!CanMoveThere(direction)) 
+        {
+            queuedDirection = null; 
+            return;
+        }
+
+        // We removed SpawnRow() from here because the movement hasn't physically started yet!
         StartCoroutine(Roll(direction));
     }
 
     bool CanMoveThere(Vector3 dir)
     {
-        return true;
+        Vector3 targetPosition = transform.position + (dir * DiceSize);
+        Vector3 halfExtents = new Vector3(DiceSize, DiceSize, DiceSize) * 0.45f;
+        bool isObstacleInWay = Physics.CheckBox(targetPosition, halfExtents, Quaternion.identity, obstacleLayer);
+        return !isObstacleInWay;
     }
-
-
 
     IEnumerator Roll(Vector3 direction)
     {
         isMoving = true;
 
+        // --- THE FIX ---
+        // Right here, we are 100% sure the dice passed the collision check 
+        // AND is officially starting its roll. If the direction is forward, trigger the row spawn!
+        if (direction == Vector3.forward)
+        {
+            isMovingForward = 1;
+        }
+        else
+        {
+            isMovingForward = 0; // Reset it if rolling left or right
+        }
+
         float rotated = 0f;
         Vector3 pivot = transform.position + (Vector3.down + direction) * (DiceSize / 2f);
         Vector3 axis = Vector3.Cross(Vector3.up, direction);
-        
 
         while (rotated < rollAngle)
         {
@@ -83,13 +95,11 @@ public class PlayerMovementSystem : MonoBehaviour
 
             transform.RotateAround(pivot, axis, step);
             rotated += step;
-        
-            
+
             yield return null;
         }
 
         SnapToGrid();
-        
 
         isMoving = false;
 
@@ -110,16 +120,5 @@ public class PlayerMovementSystem : MonoBehaviour
         );
 
         transform.rotation = Quaternion.identity;
-        
-    }
-
-    void SpawnRow()
-    {
-        if (forwardCheck == true)
-        {
-            isMovingForward = 1;
-            forwardCheck = false;
-        }
-        
     }
 }
