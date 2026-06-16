@@ -1,11 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic; 
+using TMPro;
 
 public class MapScript : MonoBehaviour
 {
     int nextSpawnZ;
     public GameObject prototypeRows;
     public PlayerMovementSystem PlayerMovementSystem;
+    public TextMeshProUGUI scoreText;
+    int score;
 
     Queue<GameObject> spawnedRows = new Queue<GameObject>();
     int maxRows;
@@ -18,6 +21,9 @@ public class MapScript : MonoBehaviour
 
     void Update()
     {
+        score = PlayerMovementSystem.score;
+        scoreText.text = "Score: " + score;
+
         if (spawnedRows.Count > maxRows)
         {
             SpawnRow();

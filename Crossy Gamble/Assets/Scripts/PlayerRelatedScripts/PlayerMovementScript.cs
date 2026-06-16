@@ -10,6 +10,7 @@ public class PlayerMovementSystem : MonoBehaviour
     [SerializeField] private float rollAngle = 90;
     [SerializeField] private float rollDuration = 0.3f;
     [SerializeField] public int isMovingForward;
+    public int score;
 
     [Header("Collision Settings")]
     [SerializeField] private LayerMask obstacleLayer; 
@@ -20,6 +21,7 @@ public class PlayerMovementSystem : MonoBehaviour
     void Start()
     {
         isMovingForward = 0;
+        score = 0;
     }
 
     void Update()
@@ -72,6 +74,7 @@ public class PlayerMovementSystem : MonoBehaviour
         if (direction == Vector3.forward)
         {
             isMovingForward = 1;
+            score++;
         }
         else
         {
