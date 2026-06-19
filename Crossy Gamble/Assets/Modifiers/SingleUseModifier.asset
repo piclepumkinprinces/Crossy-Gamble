@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d855775379c66f348a6abec09c89339f, type: 3}
   m_Name: SingleUseModifier
   m_EditorClassIdentifier: Assembly-CSharp::ModifierData
-  modifierName: 
-  modifierType: 0
+  modifierName: SingleUseTest
+  modifierType: 1
+  effect: 1

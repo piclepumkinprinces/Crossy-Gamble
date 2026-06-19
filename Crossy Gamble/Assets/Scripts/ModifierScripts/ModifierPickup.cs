@@ -6,6 +6,7 @@ public class ModifierPickup : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        print("Collided");
         if (!other.CompareTag("Player"))
         {
             print("compared");
